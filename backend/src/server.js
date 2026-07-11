@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve uploaded files
-const uploadsDir = path.join(__dirname, 'uploads');
+const uploadsDir = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -44,10 +44,11 @@ app.get('/health', (req, res) => {
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+    const frontendDistPath = path.join(__dirname, '..', 'frontend', 'dist');
+    app.use(express.static(frontendDistPath));
 
     app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+        res.sendFile(path.join(frontendDistPath, 'index.html'));
     });
 }
 
